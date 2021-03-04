@@ -21,8 +21,8 @@ module.exports = {
     hot: true,
     publicPath: '/',
     historyApiFallback: true,
-    // inline: true,
-    // headers: { 'Access-Control-Allow-Origin': '*' },
+    inline: true,
+    headers: { 'Access-Control-Allow-Origin': '*' },
     proxy: {
       '/': {
         target: 'http://localhost:3000/',

@@ -2,26 +2,29 @@ const fs = require('fs');
 
 
 const logIndexPath = `${__dirname}/logIndex.json`;
+
 const logIndex = JSON.parse(fs.readFileSync(logIndexPath));
 
 const db = {};
 
 db.insert = ([data, date]) => {
-
-// NEED TO UPDATE LOGINDEX!!!!!
+  
+  // NEED TO UPDATE LOGINDEX!!!!!
   // if (!db.checkIndex(date)) 
-
-  // try {
-  //   const dataToUpdate = db.read(date);
-  //   dataToUpdate[data.entries.time] = data;
-  //   if (!dataToUpdate.entries.date) {
-  //     dataToUpdate.entries.date = date;
-  //   }
-  //   db.write(dataToUpdate, date);
-  // }
-  // catch {
-  //   return new Error('Error writing data')
-  // }
+  console.log('data to insert:', data)
+console.log('date to insert:', date)
+  try {
+    const dataToUpdate = db.read(date);
+console.log('dataToUpdate:', dataToUpdate)
+    dataToUpdate[data.entries.time] = data;
+    if (!dataToUpdate.entries.date) {
+      dataToUpdate.entries.date = date;
+    }
+    db.write(dataToUpdate, date);
+  }
+  catch {
+    return new Error('Error writing data')
+  }
   return `File ${date} successfully updated`;
 };
 
@@ -57,7 +60,7 @@ db.write = (data, date) => {
 
 
 // db.reset = (path) => {
-//   currentData = JSON.parse(fs.readFileSync(path));
+// currentData = JSON.parse(fs.readFileSync(path));
 // };
 
 

@@ -3,6 +3,7 @@ const path = require('path');
 const express = require('express');
 const db = require('./logbook');
 
+
 const app = express();
 // const port = process.env.PORT || 3000;
 const port = 3000;
@@ -16,14 +17,14 @@ app.get('/', (req, res) => {
   return res.status(200).sendFile(path.join(__dirname, '../client/index.html'));
 });
 
-// app.put('/entries', (req, res, next) => {
-// console.log('ABOUT TO PUT!!!');
-//   const putResult = db.insert(req.body);
-//   if (putResult instanceof Error) {
-//     return next({ code: 400, error: putResult });
-//   }
-//   res.json(putResult);
-// });
+app.put('/entries', (req, res, next) => {
+console.log('ABOUT TO PUT!!!', req.body);
+  const putResult = db.insert(req.body);
+  if (putResult instanceof Error) {
+    return next({ code: 400, error: putResult });
+  }
+  res.json(putResult);
+});
 
 app.get('/entries', (req, res) => {
   console.log('HIT ENTRIES!!!!!');

@@ -4,7 +4,6 @@ import Input from './components/Input.jsx';
 import Day from './components/Day.jsx';
 
 import './stylesheets/styles.css';
-import { insert } from '../server/logbook.js';
 
 
 class App extends Component {
@@ -56,17 +55,18 @@ class App extends Component {
   componentDidMount() {
     // set current date/time
     const d = new Date()
-    const date = d.toLocaleDateString();
+    const date = d.toLocaleDateString().replace(/\//g, '-');
     const time = d.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'});
+
     this.setState({displayDate: date, displayTime: time, currentDate: date, onToday: true})
     
     // convert date to log date
-    const convertedDate = 'log' + date.replace(/\//g, '-');
     
-    this.getEntries(convertedDate);
+    this.getEntries(date);
   }
   
-  getEntries(convertedDate) {
+  getEntries(date) {
+    const convertedDate = 'log' + date;
     let entries;
     fetch(`/entries?date=${convertedDate}`)
     .then(res => res.json())
@@ -88,6 +88,8 @@ class App extends Component {
   }
   
   insertEntries(entry, date) {
+
+
     const data = [entry, date];
     fetch('entries', {
       method: 'PUT',
@@ -111,8 +113,8 @@ class App extends Component {
   
   processInput(val) {
     console.log('PROCESS THIS val:', val);
-    const entry = {"580": {"shot": 6, "bg": 108, "bgLabel": "wal", "time": 580, "notes": "big lunch"}};
-    const date = 'log3-4-2021';
+    const entry = {"600": {"shot": 2, "bg": 67, "bgLabel": "pre", "time": 600, "notes": "OMG I CANT BELIEVE IT'S NOT"}};
+    const date = '3-4-2021';
     this.insertEntries(entry, date);
     this.getEntries(date);
   }

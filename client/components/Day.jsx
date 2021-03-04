@@ -1,6 +1,6 @@
 /* eslint-disable no-empty */
 /* eslint-disable indent */
-import React, { Component } from 'react';
+import React from 'react';
 
 import Entry from './Entry.jsx';
 // import * as bgFuncs from './getBloodSugars';
