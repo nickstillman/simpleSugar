@@ -16,13 +16,14 @@ app.get('/', (req, res) => {
   return res.status(200).sendFile(path.join(__dirname, '../client/index.html'));
 });
 
-app.put('/entries', (req, res, next) => {
-  const syncResult = db.sync(req.body);
-  if (syncResult instanceof Error) {
-    return next({ code: 400, error: syncResult });
-  }
-  res.json(syncResult);
-});
+// app.put('/entries', (req, res, next) => {
+// console.log('ABOUT TO PUT!!!');
+//   const putResult = db.insert(req.body);
+//   if (putResult instanceof Error) {
+//     return next({ code: 400, error: putResult });
+//   }
+//   res.json(putResult);
+// });
 
 app.get('/entries', (req, res) => {
   console.log('HIT ENTRIES!!!!!');
@@ -34,11 +35,11 @@ app.get('/entries', (req, res) => {
   const {date} = req.query;
   const data = db.read(date);
   console.log('data:', data)
-  if (typeof data === 'object') {
+  // if (typeof data === 'object') {
     res.status(200).json(data);
-  } else {
-    res.status(200).json(data);
-  }
+  // } else {
+  //   res.status(200).json(data);
+  // }
 });
 
 app.use(({ code, error }, req, res, next) => {

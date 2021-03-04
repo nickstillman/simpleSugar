@@ -6,10 +6,23 @@ const logIndex = JSON.parse(fs.readFileSync(logIndexPath));
 
 const db = {};
 
-db.sync = (dayLog) => {
-  db.write(markets);
-  db.reset();
-  return marketList;
+db.insert = ([data, date]) => {
+
+// NEED TO UPDATE LOGINDEX!!!!!
+  // if (!db.checkIndex(date)) 
+
+  // try {
+  //   const dataToUpdate = db.read(date);
+  //   dataToUpdate[data.entries.time] = data;
+  //   if (!dataToUpdate.entries.date) {
+  //     dataToUpdate.entries.date = date;
+  //   }
+  //   db.write(dataToUpdate, date);
+  // }
+  // catch {
+  //   return new Error('Error writing data')
+  // }
+  return `File ${date} successfully updated`;
 };
 
 
@@ -19,7 +32,6 @@ db.read = (logDate) => {
     const data = JSON.parse(fs.readFileSync(logDatePath));
     return data;
   }
-  
   return 'Date not found';
 }
 
@@ -36,15 +48,16 @@ db.drop = () => {
 };
 
 
-db.write = (data) => {
+db.write = (data, date) => {
   // fs.writeFileSync(writeLocation, JSON.stringify(data, null, 2));
+  const logPath = `${__dirname}/${date}.json`
+  console.log('writing ', data, ' to ', logPath);
   fs.writeFileSync(logPath, JSON.stringify(data));
-  
 };
 
 
-// db.reset = () => {
-//   marketList = JSON.parse(fs.readFileSync(logPath));
+// db.reset = (path) => {
+//   currentData = JSON.parse(fs.readFileSync(path));
 // };
 
 

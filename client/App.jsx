@@ -4,6 +4,7 @@ import Input from './components/Input.jsx';
 import Day from './components/Day.jsx';
 
 import './stylesheets/styles.css';
+import { insert } from '../server/logbook.js';
 
 
 class App extends Component {
@@ -47,13 +48,17 @@ class App extends Component {
     }
   }
   
+  scrollScreen() {
+    const bottom = document.getElementById('bottom');
+    bottom.scrollIntoView({ behavior: 'smooth' });
+  }
   
   componentDidMount() {
     // set current date/time
     const d = new Date()
     const date = d.toLocaleDateString();
     const time = d.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'});
-    this.setState({displayDate: date, displayTime: time})
+    this.setState({displayDate: date, displayTime: time, currentDate: date, onToday: true})
     
     // convert date to log date
     const convertedDate = 'log' + date.replace(/\//g, '-');
@@ -75,18 +80,43 @@ class App extends Component {
       }
       this.setState({
         entries,
-        fetchedEntries: true,
-        onToday: true
+        fetchedEntries: true
       });
     })
     .then(this.scrollScreen)
-    .catch(err => console.log('App.componentDidMount: get entries: ERROR: ', err));
+    .catch(err => console.error('App.componentDidMount: get entries: ERROR: ', err));
   }
   
-  scrollScreen() {
-    const bottom = document.getElementById('bottom');
-    bottom.scrollIntoView({ behavior: 'smooth' });
+  insertEntries(entry, date) {
+    const data = [entry, date];
+    fetch('entries', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+    .then(res => res.json())
+    .then(success => {
+      console.log('Success:', success);
+    })
+    .then(() => {
+      this.setState({displayDate: date})
+      this.getEntries(date)
+    })
+    .catch((err) => {
+      console.error('Error:', err);
+    });
   }
+  
+  processInput(val) {
+    console.log('PROCESS THIS val:', val);
+    const entry = {"580": {"shot": 6, "bg": 108, "bgLabel": "wal", "time": 580, "notes": "big lunch"}};
+    const date = 'log3-4-2021';
+    this.insertEntries(entry, date);
+    this.getEntries(date);
+  }
+  
   
   
   render() {
