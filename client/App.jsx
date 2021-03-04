@@ -13,7 +13,8 @@ class App extends Component {
       fetchedEntries: true,//false,
       // entries: [{shot: 3, bg: 98, time: 220, notes: 'small breakfast'}, {bg: 128, time: 300, notes: 'bite PB'}, {shot: 6, bg: 108, time: 580, notes: 'big lunch'}, {shot: 5, bg: 250, time: 760, notes: 'high BS'}, {shot: -20, time: 1140}, {shot: 2, bg: 140, time: 1160, notes: null}],//[],
       
-      entries: {220: {shot: 3, bg: 28, bgLabel: 'wal', time: 220, notes: 'small breakfast'}, 300: {bg: 328, bgLabel: '', time: 300, notes: 'bite PB'}, 580: {shot: 6, bg: 108, bgLabel: 'wal', time: 580, notes: 'big lunch'}, 760: {shot: 5, bg: 250, bgLabel: '', time: 760, notes: 'high BS'}, 1140: {shot: -15, time: 1140}, 1160: {shot: 2, bg: 140, bgLabel: 'wal', time: 1160, notes: null}},
+      // entries: {date: {month: 4, day: 14, year: 1979}, 220: {shot: 3, bg: 28, bgLabel: 'wal', time: 220, notes: 'small breakfast'}, 300: {bg: 328, bgLabel: '', time: 300, notes: 'bite PB'}, 580: {shot: 6, bg: 108, bgLabel: 'wal', time: 580, notes: 'big lunch'}, 760: {shot: 5, bg: 250, bgLabel: '', time: 760, notes: 'high BS'}, 1140: {shot: -15, time: 1140}, 1160: {shot: 2, bg: 140, bgLabel: 'wal', time: 1160, notes: null}},
+      entries: {},
       
       displayDate: '',
       displayTime: '',
@@ -55,23 +56,34 @@ class App extends Component {
     const time = d.toLocaleTimeString();
     this.setState({displayDate: date, displayTime: time})
     
+    // convert date to log date
+    const convertedDate = 'log' + date.replace(/\//g, '-');
     
-    fetch('/entries')
+    this.getEntries(convertedDate);
+    
+    // const bottom = document.getElementById('bottom');
+    // bottom.scrollIntoView({ behavior: 'smooth' });
+  }
+  
+  getEntries(convertedDate) {
+    fetch(`/entries?date=${convertedDate}`)
     .then(res => res.json())
-    .then((entries) => {
+    .then(({entries}) => {
       console.log('entries', entries)
-      if (!Array.isArray(entries)) entries = [];
-      return this.setState({
+      // if (!Array.isArray(entries)) entries = [{}];
+      this.setState({
         entries,
         fetchedEntries: true
       });
     })
-    .catch(err => console.log('Day.componentDidMount: get entries: ERROR: ', err));
-    
+    .then(this.scrollScreen)
+    .catch(err => console.log('App.componentDidMount: get entries: ERROR: ', err));
+  }
+  
+  scrollScreen() {
     const bottom = document.getElementById('bottom');
     bottom.scrollIntoView({ behavior: 'smooth' });
   }
-  
   
   
   render() {

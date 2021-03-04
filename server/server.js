@@ -1,7 +1,7 @@
 /* eslint no-unused-vars: 0 */
 const path = require('path');
 const express = require('express');
-// const db = require('./db/markets');
+const db = require('./logbook');
 
 const app = express();
 // const port = process.env.PORT || 3000;
@@ -16,10 +16,30 @@ app.get('/', (req, res) => {
   return res.status(200).sendFile(path.join(__dirname, '../client/index.html'));
 });
 
+app.put('/entries', (req, res, next) => {
+  const syncResult = db.sync(req.body);
+  if (syncResult instanceof Error) {
+    return next({ code: 400, error: syncResult });
+  }
+  res.json(syncResult);
+});
+
 app.get('/entries', (req, res) => {
   console.log('HIT ENTRIES!!!!!');
-  res.status(200).send({"yeah": 2});
+  
+  const data = {
+    "entries": {"date": {"month": 4, "day": 14, "year": 1979}, "220": {"shot": 3, "bg": 28, "bgLabel": "wal", "time": 220, "notes": "small breakfast"}, "300": {"bg": 328, "bgLabel": "", "time": 300, "notes": "bite PB"}, "580": {"shot": 6, "bg": 108, "bgLabel": "wal", "time": 580, "notes": "big lunch"}, "760": {"shot": 5, "bg": 250, "bgLabel": "", "time": 760, "notes": "high BS"}, "1140": {"shot": -15, "time": 1140}, "1160": {"shot": 2, "bg": 140, "bgLabel": "wal", "time": 1160, "notes": null}}
+  }
+  const {date} = req.params
+  // res.json(db.read(date));
+  
+  res.status(200).send(data);
 });
+
+app.use(({ code, error }, req, res, next) => {
+  res.status(code).json({ error });
+});
+
 
 // app.put('/markets', (req, res, next) => {
 //   const syncResult = db.sync(req.body);
