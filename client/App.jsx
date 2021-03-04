@@ -20,7 +20,8 @@ class App extends Component {
       displayTime: '',
       userInput: '',
       currentDate: 0,
-      currentTime: 0
+      currentTime: 0,
+      onToday: true
     };
     
     // this.handleChange = this.handleChange.bind(this);    
@@ -47,33 +48,35 @@ class App extends Component {
   }
   
   
-  
-  
   componentDidMount() {
     // set current date/time
     const d = new Date()
     const date = d.toLocaleDateString();
-    const time = d.toLocaleTimeString();
+    const time = d.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'});
     this.setState({displayDate: date, displayTime: time})
     
     // convert date to log date
     const convertedDate = 'log' + date.replace(/\//g, '-');
     
     this.getEntries(convertedDate);
-    
-    // const bottom = document.getElementById('bottom');
-    // bottom.scrollIntoView({ behavior: 'smooth' });
   }
   
   getEntries(convertedDate) {
+    let entries;
     fetch(`/entries?date=${convertedDate}`)
     .then(res => res.json())
-    .then(({entries}) => {
-      console.log('entries', entries)
-      // if (!Array.isArray(entries)) entries = [{}];
+    .then((data) => {
+      console.log('entries', data)
+      if (typeof data !== 'object') {
+        entries = {};
+        console.log(res);
+      } else {
+        ({entries} = data);
+      }
       this.setState({
         entries,
-        fetchedEntries: true
+        fetchedEntries: true,
+        onToday: true
       });
     })
     .then(this.scrollScreen)
@@ -96,6 +99,7 @@ class App extends Component {
       fetchedEntries={this.state.fetchedEntries}
       displayDate={this.state.displayDate}
       displayTime={this.state.displayTime}
+      onToday={this.state.onToday}
       />
       {/* <Input value={this.state.userInput}
       handleChange={this.handleChange}

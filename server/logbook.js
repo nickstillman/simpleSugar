@@ -2,7 +2,7 @@ const fs = require('fs');
 
 
 const logIndexPath = `${__dirname}/logIndex.json`;
-logIndex = JSON.parse(fs.readFileSync(logIndexPath));
+const logIndex = JSON.parse(fs.readFileSync(logIndexPath));
 
 const db = {};
 
@@ -14,12 +14,21 @@ db.sync = (dayLog) => {
 
 
 db.read = (logDate) => {
-  console.log(req.body);
+  if (db.checkIndex(logDate)) {
+    const logDatePath = `${__dirname}/${logDate}.json`
+    const data = JSON.parse(fs.readFileSync(logDatePath));
+    return data;
+  }
   
-  // db.reset();
-  // return marketList;
+  return 'Date not found';
 }
 
+db.checkIndex = (logDate) => {
+  for (const date of logIndex) {
+    if (date === logDate) return true;
+  }
+  return false;
+}
 
 db.drop = () => {
   marketList = [];
