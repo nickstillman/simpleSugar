@@ -56,17 +56,17 @@ class App extends Component {
     this.setState({displayDate: date, displayTime: time})
     
     
-    fetch('/api/')
-      .then(res => {console.log(res);
-res.json();})
-      .then((entries) => {
-        if (!Array.isArray(entries)) entries = [];
-        return this.setState({
-          entries,
-          fetchedEntries: true
-        });
-      })
-      .catch(err => console.log('Day.componentDidMount: get entries: ERROR: ', err));
+    fetch('/entries')
+    .then(res => res.json())
+    .then((entries) => {
+      console.log('entries', entries)
+      if (!Array.isArray(entries)) entries = [];
+      return this.setState({
+        entries,
+        fetchedEntries: true
+      });
+    })
+    .catch(err => console.log('Day.componentDidMount: get entries: ERROR: ', err));
     
     const bottom = document.getElementById('bottom');
     bottom.scrollIntoView({ behavior: 'smooth' });

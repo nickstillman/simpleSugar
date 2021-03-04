@@ -8,14 +8,18 @@ const app = express();
 const port = 3000;
 
 
-app.use('/build', express.static(path.join(__dirname, '../../build')));
+app.use('/build', express.static(path.join(__dirname, '../build')));
 app.use(express.json());
 
 app.get('/', (req, res) => {
-console.log('HIT THAT ROOT')
+  console.log('HIT THAT ROOT')
   return res.status(200).sendFile(path.join(__dirname, '../client/index.html'));
+});
 
-})
+app.get('/entries', (req, res) => {
+  console.log('HIT ENTRIES!!!!!');
+  res.status(200).send({"yeah": 2});
+});
 
 // app.put('/markets', (req, res, next) => {
 //   const syncResult = db.sync(req.body);

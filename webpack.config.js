@@ -8,30 +8,30 @@ module.exports = {
     './client/index.js',
   ],
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'build'),
     publicPath: '/',
     filename: 'bundle.js',
   },
-  // devtool: 'eval-source-map',
+  devtool: 'eval-source-map',
   mode: 'development',
   devServer: {
     host: 'localhost',
     port: 8080,
-    contentBase: path.resolve(__dirname, 'dist'),
+    contentBase: path.resolve(__dirname, 'build'),
     hot: true,
     publicPath: '/',
     historyApiFallback: true,
     // inline: true,
     // headers: { 'Access-Control-Allow-Origin': '*' },
     proxy: {
-      '/api/**': {
+      '/': {
         target: 'http://localhost:3000/',
         secure: false,
       },
-      '/assets/**': {
-        target: 'http://localhost:3000/',
-        secure: false,
-      },
+      // '/assets/**': {
+      //   target: 'http://localhost:3000/',
+      //   secure: false,
+      // },
     },
   },
   module: {
