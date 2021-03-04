@@ -1,26 +1,27 @@
 const fs = require('fs');
 
-
-const logIndexPath = `${__dirname}/logIndex.json`;
-
-const logIndex = JSON.parse(fs.readFileSync(logIndexPath));
-
 const db = {};
 
 db.insert = ([data, date]) => {
   
-  // NEED TO UPDATE LOGINDEX!!!!!
-  // if (!db.checkIndex(date)) 
-  console.log('data to insert:', data)
-console.log('date to insert:', date)
   try {
     const dataToUpdate = db.read(date);
-console.log('dataToUpdate:', dataToUpdate)
-    dataToUpdate[data.entries.time] = data;
+    dataToUpdate.entries = {...dataToUpdate.entries, ...data}
     if (!dataToUpdate.entries.date) {
       dataToUpdate.entries.date = date;
     }
+    console.log('dataToUpdate:', dataToUpdate)
+    
     db.write(dataToUpdate, date);
+    
+    // update logIndex
+    const logIndexPath = `${__dirname}/logIndex.json`;
+    const logIndex = JSON.parse(fs.readFileSync(logIndexPath));
+    if (!logIndex.includes(date)) {
+      logIndex.push(date);
+      db.write(logIndex, logIndexPath);
+    }
+    
   }
   catch {
     return new Error('Error writing data')
@@ -39,6 +40,10 @@ db.read = (logDate) => {
 }
 
 db.checkIndex = (logDate) => {
+  const logIndexPath = `${__dirname}/logIndex.json`;
+  
+  const logIndex = JSON.parse(fs.readFileSync(logIndexPath));
+  
   for (const date of logIndex) {
     if (date === logDate) return true;
   }

@@ -21,7 +21,7 @@ const Entry = ({
   const spaceWidth = (400 - bg) + 'px';
   const iobWidth = (iobDisplay * 50) + 'px';
   
-  const bgWrite = bgDisplay ? bg > 50 ? (bg + ' ' + bgLabel + ' ') : bg > 10 ? (bg + ' ') : '\u00A0' : '\u00A0';
+  const bgWrite = bgDisplay ? bg > 80 ? (bg + ' ' + bgLabel + ' ') : bg > 10 ? (bg + ' ') : '\u00A0' : '\u00A0';
   
   // const bgWrite = bgDisplay ? bg ? (' ' + bg + ' ' + bgLabel + ' ') : '' : '';
   

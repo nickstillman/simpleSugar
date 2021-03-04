@@ -1,4 +1,1 @@
-{
-"entries": {"date": "log3-4-2021", "220": {"shot": 3, "bg": 28, "bgLabel": "wal", "time": 220, "notes": "small breakfast"}, "300": {"bg": 328, "bgLabel": "", "time": 300, "notes": "bite PB"}, "580": {"shot": 6, "bg": 108, "bgLabel": "wal", "time": 580, "notes": "big lunch"}, "760": {"shot": 5, "bg": 250, "bgLabel": "", "time": 760, "notes": "high BS"}, "1140": {"shot": -15, "time": 1140}, "1160": {"shot": 2, "bg": 140, "bgLabel": "wal", "time": 1160, "notes": null}}
-}
-
+{"entries":{"220":{"shot":3,"bg":28,"bgLabel":"wal","time":220,"notes":"small breakfast"},"300":{"bg":328,"bgLabel":"","time":300,"notes":"bite PB"},"580":{"shot":6,"bg":108,"bgLabel":"wal","time":580,"notes":"big lunch"},"600":{"shot":2,"bg":67,"bgLabel":"pre","time":600,"notes":"OMG I CANT BELIEVE IT'S NOT"},"760":{"shot":5,"bg":250,"bgLabel":"","time":760,"notes":"high BS"},"1140":{"shot":-15,"time":1140},"1160":{"shot":2,"bg":140,"bgLabel":"wal","time":1160,"notes":null},"date":"log3-4-2021"}}

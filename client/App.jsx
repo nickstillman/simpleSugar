@@ -21,7 +21,8 @@ class App extends Component {
       userInput: '',
       currentDate: 0,
       currentTime: 0,
-      onToday: true
+      onToday: true,
+      scroll: true
     };
     
     // this.handleChange = this.handleChange.bind(this);    
@@ -57,8 +58,8 @@ class App extends Component {
     const d = new Date()
     const date = d.toLocaleDateString().replace(/\//g, '-');
     const time = d.toLocaleTimeString([], {hour: 'numeric', minute:'2-digit'});
-
-    this.setState({displayDate: date, displayTime: time, currentDate: date, onToday: true})
+    
+    this.setState({displayDate: date, displayTime: time, currentDate: date, onToday: true, scroll: true})
     
     // convert date to log date
     
@@ -74,7 +75,6 @@ class App extends Component {
       console.log('entries', data)
       if (typeof data !== 'object') {
         entries = {};
-        console.log(res);
       } else {
         ({entries} = data);
       }
@@ -83,14 +83,16 @@ class App extends Component {
         fetchedEntries: true
       });
     })
-    .then(this.scrollScreen)
+    .then(() => {
+      console.log('scroll inside:', this.state.scroll)
+      if (this.state.scroll) this.scrollScreen();
+    })
     .catch(err => console.error('App.componentDidMount: get entries: ERROR: ', err));
   }
   
   insertEntries(entry, date) {
-
-
-    const data = [entry, date];
+    const data = [entry, 'log' + date];
+    
     fetch('entries', {
       method: 'PUT',
       headers: {
@@ -103,8 +105,8 @@ class App extends Component {
       console.log('Success:', success);
     })
     .then(() => {
-      this.setState({displayDate: date})
       this.getEntries(date)
+      this.setState({displayDate: date})
     })
     .catch((err) => {
       console.error('Error:', err);
@@ -115,8 +117,9 @@ class App extends Component {
     console.log('PROCESS THIS val:', val);
     const entry = {"600": {"shot": 2, "bg": 67, "bgLabel": "pre", "time": 600, "notes": "OMG I CANT BELIEVE IT'S NOT"}};
     const date = '3-4-2021';
+    this.setState({scroll: false});
     this.insertEntries(entry, date);
-    this.getEntries(date);
+    // this.getEntries(date);
   }
   
   
